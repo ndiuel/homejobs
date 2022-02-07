@@ -7,13 +7,13 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 arr = [31, 12, 2]
 
 class Config:
-    APP_NAME = "DAILYBREAD"
+    APP_NAME = "HOMEJOBS"
     BENEFACTORS = cycle(arr)
     UPLOAD_PATH = os.path.join(basedir, 'app', 'static', 'uploads')
     URL = os.environ.get("URL") or 'localhost:5000'
     SECRET_KEY = 'svav690-behd-4e6d-b117-7b7d92ba3a00'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    MAIL_SERVER = 'mail.daily-bread.com.ng'
+    MAIL_SERVER = 'mail.homejobs.com.ng'
     MAIL_PORT = 587
     MAIL_USE_SSL = False
     MAIL_USE_TLS = True

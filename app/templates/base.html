@@ -16,10 +16,10 @@
     <link rel="shortcut icon" href="{{url_for('static', filename='logo.ico')}}" type="image/ico">
 
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <link href='https://cdn.jsdelivr.net/npm/css.gg/icons/all.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;300;400;500;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
     {% set title = title|default(config['APP_NAME']) %}
     <title>{{title}}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
@@ -35,14 +35,14 @@
     {{moment.include_moment()}}
 </head>
 
-<body class="bg-gray-900">
+<body class="bg-gray-100">
     <style>
         [x-cloak] {
             display: none !important;
         }
 
         html {
-            font-family: 'Lexend', sans-serif;
+            font-family: 'Quicksand', sans-serif;
             min-height: 100%;
             height: 100%;
         }

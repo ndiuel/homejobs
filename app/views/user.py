@@ -17,3 +17,6 @@ def timezone():
     return "ok"
 
 
+@user.route("/")
+def index():
+    return render_template("index.html")
