@@ -8,6 +8,7 @@ migrate = Migrate()
 from .base import BaseModel
 from .user import User
 from .role import Role, UserRoles
+from .provider import Provider
 
 
 def init_app(app):

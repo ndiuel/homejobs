@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request,  flash, current_app
 from flask_login import current_user, login_user, login_required, logout_user
 from ..forms.auth import LoginForm, SignUpForm
-from ..models import User
+from ..models import User, Provider
 
 
 auth = Blueprint('auth', __name__)
@@ -24,14 +24,18 @@ def login():
 def signup():
     form = SignUpForm()
     if form.validate_on_submit():
-        user = User(phone_no=form.phone_no.data,
+        user = User(
                     email=form.email.data,
                     password=form.password.data,
                     username=form.username.data,
                     )
         user.add_role('normal')
         user.save()
-        flash("Account created successfully, you can now login")
+        if form.is_provider.data:
+            provider = Provider()
+            provider.user_id = user.id 
+            provider.save()
+        flash("Account created successfully")
         return redirect(url_for('auth.login'))
     if form.errors:
         flash(str(form.errors).replace('[', '').replace(

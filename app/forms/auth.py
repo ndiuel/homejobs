@@ -56,7 +56,7 @@ class SignUpForm(Form):
     password = PasswordField("Password", validators=[DataRequired()])
     confirm_password = PasswordField(
         "Confirm Password", validators=[DataRequired()])
-    is_merchant = BooleanField("Register As A Merchant")
+    is_provider = BooleanField("Register As A Service Provider")
     submit = SubmitField("Create Account")   
 
     def validate_confirm_password(self, field):

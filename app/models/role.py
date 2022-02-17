@@ -6,12 +6,6 @@ ROLES = [
 ]
 
 ADMIN_ROLES = [
-    'can_reply', 'can_create_package', 'can_edit_settings',
-    'can_cancel_investment', 'can_cancel_withdrawal', 'can_confirm_investment',
-    'can_confirm_withdrawal', 'can_cancel_merge', 'can_confirm_merge',
-    'can_block_user', 'can_verify_user','can_activate_user', 'can_upgrade_user',
-    'can_edit_user', 'can_change_password', 'can_change_maturity_date', 'can_change_merge_expiry'
-    ,'can_create_withdrawal'
 ]
 
 

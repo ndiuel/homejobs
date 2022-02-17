@@ -1,20 +1,14 @@
-import re
 from ..views import login_manager
 from . import db
-from flask import url_for, current_app
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
-from uuid import uuid4
 from .base import BaseModel
 from .role import Role
-from string import digits, ascii_letters
-from random import choice
-from json import dumps, loads
-
+from uuid import uuid4
 
 
 class User(UserMixin, db.Model, BaseModel):
+    __tablename__ = 'users'
     id = db.Column(
         db.Integer,
         primary_key=True
@@ -24,11 +18,22 @@ class User(UserMixin, db.Model, BaseModel):
         unique=True,
         index=True
     )
+    firstname = db.Column(
+        db.String(64),
+        unique=True,
+        index=True
+    )
     username = db.Column(
         db.String(64),
         unique=True,
         index=True
     )
+    lastname = db.Column(
+        db.String(64),
+        unique=True,
+        index=True
+    )
+    image_url = db.Column(db.Text)
     phone_no = db.Column(db.String(20))
     password_hash = db.Column(db.String(128))
     password_id = db.Column(
@@ -43,6 +48,15 @@ class User(UserMixin, db.Model, BaseModel):
         )
     )
     
+    
+    @property
+    def password(self):
+        raise AttributeError('password is not a readbale attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_id = str(uuid4())
+        self.password_hash = generate_password_hash(password)    
         
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
