@@ -23,16 +23,16 @@ class ResetPassword(Form):
 
 
 class LoginForm(Form):
-    username = StringField("Username", validators=[
-                           DataRequired(), Length(1, 100)])
+    email = StringField("Email", validators=[
+                           DataRequired(), Length(1, 100), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
     remember = BooleanField("Remember Me")
-    submit = SubmitField("Login")
-
-    def validate_username(self, field):
-        if User.query.filter_by(username=field.data).first() is None:
-            flash("Incorrect username or password", category='error')
-            raise ValidationError("Username doesn't exist")
+    submit = SubmitField("Sign In")
+    
+    def validate_email(self, field):
+        user = User.query.filter_by(email=self.field.data).first()
+        if user:
+            flash("Email already in use")
 
     def validate_password(self, field):
         user = User.query.filter_by(username=self.username.data).first()
@@ -52,35 +52,21 @@ class AdminLoginForm(LoginForm):
 
 
 class SignUpForm(Form):
-    username = StringField("Username", validators=[
-                           DataRequired(), Length(1, 100)])
-    phone_no = StringField("Phone Number", render_kw={'inputmode': 'numeric'}, validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
     confirm_password = PasswordField(
         "Confirm Password", validators=[DataRequired()])
-    referrer_code = StringField("Referrer Code", validators=[])
+    is_merchant = BooleanField("Register As A Merchant")
     submit = SubmitField("Create Account")   
 
     def validate_confirm_password(self, field):
         if field.data != self.password.data:
             raise ValidationError("Passwords do not match")
-
-    def validate_username(self, field):
-        if User.query.filter_by(username=field.data).first():
-            raise ValidationError("Username already exists")
-
-    def validate_referrer(self, field):
-        if field.data.strip() and User.query.filter_by(referral_code=field.data).first() is None:
-            raise ValidationError("Referrer Does not Exist")
         
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError("Email already exists")
         
-    def validate_phone_no(self, field):
-        if User.query.filter_by(phone_no=field.data).first():
-            raise ValidationError("Phone number already exists")
 
     
         

@@ -1,0 +1,249 @@
+{% macro render_field(field, with_errors=True, dark=False) -%}
+{% if field.name == "csrf_token" %}
+{{field()}}
+{% elif field.type == "SubmitField" %}
+<div class="relative">
+    {{field(class="h-12 shadow-sm text-white font-medium block tracking-wide bg-blue-900
+    items-center justify-center rounded-lg
+    focus:ring-4 focus:outline-none outline-none focus:ring-opacity-50 px-4 w-full")}}
+</div>
+{% elif field.type == "BooleanField" %}
+<label for="" class="flex place-items-center space-x-2 ml-1 pt-2">
+    {{field(class_='rounded-sm  focus:ring-0')}}
+    {% if dark %}
+    <span class="text-xs tracking-widest text-white font-bold">{{field.label.text}}</span>
+    {% else %}
+    <span class="tracking-wide my-2 text-gray-600 font-semibold text-sm">{{field.label.text}}</span>
+    {% endif %}
+
+</label>
+{% elif field.type == "RadioField" %}
+<label for="" class="flex items-center space-x-2 ml-1 pt-2">
+    {{field(class_='')}}
+    <span class="text-xs tracking-widest text-gray-700 font-bold">{{field.label.text}}</span>
+</label>
+{% elif field.type == "SelectField" %}
+<div class="relative">
+    {{field.label(class_="pb-1 font-semibold text-gray-600 block text-xs tracking-widest capitalize border-gray-300 rounded-lg")}}
+    {{field(class_="block w-full mt-1 text-sm px-2 py-2  ring-0  h-12 focus:outline-none focus:ring-0 bg-white border-0 shadow-lg rounded-lg
+    text-gray-700 tracking-widest")}}
+</div>
+{% elif field.type == "TextAreaField" %}
+<div class="relative">
+    {{field.label(class_="pb-1 font-semibold text-gray-600 block text-xs tracking-widest capitalize border-gray-300 rounded-lg")}}
+    {{field(class_="block w-full mt-1 text-sm px-4 py-2  border ring-0 h-56
+    text-gray-700 tracking-widest")}}
+</div>
+{% else %}
+<div class="relative">
+    {{field.label(class_="pb-1 font-semibold text-sm text-gray-600 block tracking-wide capitalize ")}}
+    {{field(class_="block w-full mt-1 text-sm px-2 py-2  ring-0  h-12 focus:outline-none focus:ring-0 bg-white border rounded-lg border-gray-200
+    text-gray-700")}}
+</div>
+{% if with_errors %}
+{% for error in field.errors %}
+<p class="text-red-500 text-sm italic">{{error}}</p>
+{% endfor %}
+{% endif %}
+{% endif %}
+{%- endmacro %}
+
+
+{% macro render_form(form, with_errors=True, action="", dark=False) %}
+<form class="w-full max-w-md rounded-lg overflow-hidden p-1 space-y-5 relative bg-transparent text-left" method="POST"
+    action="{{action}}" enctype="multipart/form-data">
+    {% for field in form %}
+    {{render_field(field, with_errors=with_errors, dark=dark)}}
+    {% endfor %}
+</form>
+{%- endmacro %}
+
+
+{% macro render_flashed_messages() %}
+{% set messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+<div
+    class="space-y-2 w-full mx-auto max-w-2xl mt-4 text-sm px-3 absolute top-28 z-50 left-1/2 transform -translate-x-1/2 font-normal">
+    {% for category, message in messages%}
+    {% if category=='error' %}
+    <div class="alert flex items-center border-l-4 border-r-4 border-negative bg-red-200 text-gray-700 py-5 w-full px-4 shadow-2xl"
+        x-data="{show: true}" x-show="show">
+        {% else %}
+        <div class="alert flex border-l-4 border-primary border-r-4 bg-indigo-100 text-gray-700 py-5 w-full px-4 items-center shadow-2xl"
+            x-data="{show: true}" x-show="show">
+            {% endif %}
+            <p class="mr-4">{{message}}</p>
+            {% if category=='error' %}
+            <i class="alert-close fa fa-times ml-auto text-red-700 text-lg" @click="show=false"></i>
+            {% else %}
+            <i class="alert-close fa fa-times ml-auto text-xl text-gray-800" @click="show=false"></i>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {%- endmacro %}
+
+    {% macro render_countdown(time) %}
+    <p class="countdown" data-timestamp="{{time.isoformat() + 'Z'}}">
+        {{time|countdown}}
+    </p>
+
+    {%- endmacro %}
+
+    {% macro render_pagination(pagination) %}
+    {% if len(list(pagination.iter_pages())) > 1 %}
+    <div class="py-3 text-xs font-semibold tracking-wide text-pink-700 w-full">
+        <span class="flex justify-center">
+            <nav aria-label="Table navigation">
+                <ul class="flex items-center space-x-2 flex-wrap">
+                    <li class="text-primary">
+                        <a href="{{page_link(pagination.page - 1) if pagination.has_prev else '#'}}"
+                            class="py-1 rounded-md rounded-l-lg focus:outline-none" aria-label="Previous">
+                            <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
+                                <path
+                                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                    clip-rule="evenodd" fill-rule="evenodd"></path>
+                            </svg>
+                        </a>
+                    </li>
+                    {% for p in pagination.iter_pages() %}
+                    {% if p %}
+                    {% if p == pagination.page %}
+                    <li class="block">
+                        <a class="block px-3 py-2 rounded-xl focus:outline-none bg-pink-700 text-white">
+                            {{p}}
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="block">
+                        <a class="block px-3 py-2 rounded-full focus:outline-none border bg-white text-pink-700"
+                            href="{{ page_link(p) }}">
+                            {{p}}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% else %}
+                    <li class="block ">
+                        <span class="block px-1 py-2 text-primary font-bold text-4xl">...</span>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    <li class="text-primary">
+                        <a href="{{page_link(pagination.page + 1) if pagination.has_next else '#'}}" if
+                            pagination.has_next else '#' }}" class="py-1 rounded-md rounded-l-lg focus:outline-none"
+                            aria-label="Previous">
+                            <svg class="w-4 h-4 fill-current" aria-hidden="true" viewBox="0 0 20 20">
+                                <path
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" fill-rule="evenodd"></path>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </span>
+    </div>
+    {% endif %}
+    {%- endmacro %}
+
+    {% macro render_search(placeholder='Search', categories=[], sorts=[], orders=[]) %}
+    <div class="flex justify-center mb-4">
+        <form action="" class="w-full h-12 flex shadow-md rounded-lg max-w-md relative" x-data='{isOpen: false}'>
+            <span @click.prevent='isOpen=!isOpen'
+                class="bg-gray-800 text-white px-3 flex items-center justify-center rounded-l-lg"
+                @click.prevent='isOpen=true'>
+                <i class="fa fa-filter"></i>
+            </span>
+            <input type="search" name="sq" id="" class="w-full p-3 text-gray-800 border-gray-300"
+                placeholder="{{placeholder.title()}}" {% if request.args.get("sq") %}value="{{request.args.get('sq')}}"
+                {% endif %}>
+            <button class="bg-gray-800 text-white px-3 inline-flex items-center justify-center rounded-r-lg"
+                type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+            <div class="z-20 max-w-full absolute left-0 top-0 my-16 flex flex-wrap bg-white rounded-lg shadow-md text-gray-700"
+                x-show="isOpen" x-transition:enter="transition ease-in-out duration-300"
+                x-transition:enter-start="opacity-0 transform -translate-y-20" x-transition:enter-end="opacity-100"
+                x-transition:leave="transition ease-in-out duration-300" x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0 transform -translate-y-20" @click.away="isOpen=false"
+                @keydown.escape="isOpen=false">
+                {% if categories %}
+                <div class="p-4 space-y-1">
+                    <h1 class='text-sm text-gray-800 font-semibold'>Categories</h1>
+                    {% for category in categories %}
+                    <label for="" class="flex items-center space-x-2">
+                        <input type="radio" name="category" id="{{category}}" value="{{category}}"
+                            class="form-radio text-gray-800" {% if request.args.get("category")==category %}checked=""
+                            {% endif %}>
+                        <span class="">{{category.title()}}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if sorts %}
+                <div class="p-4 space-y-1">
+                    <h1 class='text-sm text-gray-800 mb-2 font-semibold'>Sort By</h1>
+                    {% for sort in sorts %}
+                    <label for="" class="flex items-center space-x-2">
+                        <input type="radio" name="sort" id="{{sort}}" value="{{sort}}"
+                            class="form-radio text-gray-800" {% if request.args.get("sort")==sort %}checked="" {%
+                            endif %}>
+                        <span class="">{{sort.title()}}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if orders %}
+                <div class="p-4 space-y-1">
+                    <h1 class='text-sm text-gray-800 mb-2 font-semibold'>Order by</h1>
+                    {% for order in orders %}
+                    <label for="" class="flex items-center space-x-2">
+                        <input type="radio" name="order" id="{{order}}" value="{{order}}"
+                            class="form-radio text-gray-800" {% if request.args.get("order")==order %}checked="" {%
+                            endif %}>
+                        <span>{{order.title()}}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    {%- endmacro %}
+    {% macro render_actions(actions, white=False) %}
+    {% set actions = filter_actions(actions) %}
+    {% if actions %}
+    <ul class="my-2 inline-flex items-center flex-shrink-0 space-x-6" x-data="{isOpen: false}">
+        <li class="">
+            <button class="text-white bg-gray-800 align-middle rounded-full px-3 text-sm py-1 focus:outline-none"
+                @click="isOpen=!isOpen" @keydown.escape="isOpen=true" aria-label="Account" aria-haspopup="true">
+                <i class="fa mr-1" :class='{"fa-caret-up": isOpen, "fa-caret-down": !isOpen}'></i><span
+                    class="text-sm">Actions</span>
+            </button>
+            <template x-if="isOpen">
+                <div x-transition:enter="transition ease-in duration-500" x-transition:enter-start="transform opacity-0"
+                    x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-500"
+                    x-transition:leave-start="opacity-100" x-transition:leave-end="transform opacity-0"
+                    class="fixed bg-black bg-opacity-25 w-full h-full z-50 inset-0 flex items-end sm:items-center sm:justify-center">
+                    <ul @click.away="isOpen=false" @keydown.escape="isOpen=false"
+                        class="p-4 space-y-2 bg-white text-gray-800 rounded-md shadow-md rounded-tl-xl w-full rounded-tr-xl max-w-lg"
+                        aria-label="submenu">
+                        {% for link, text, icon, confirm, _ in actions %}
+                        <li class="">
+                            <a class="inline-flex w-full items-center px-1 py-1 text-sm font-semibold rounded-md space-x-4"
+                                href="{{link}}" {% if confirm %}onclick="return window.confirm('{{confirm}}')" {% endif
+                                %}>
+                                <i class="fa {{icon}} mr-1"></i>
+                                <span>{{text}}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </template>
+        </li>
+    </ul>
+    {% endif %}
+    {%- endmacro %}

@@ -16,10 +16,8 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user:
             login_user(user, remember=form.remember.data)
-            if current_user.has_role('admin'):
-                return redirect(request.args.get('next') or url_for('admin.dashboard'))
             return redirect(request.args.get('next') or url_for('user.index'))
-    return render_template('auth/base.html', login_form=form, page_title="Login", signup_form=SignUpForm())
+    return render_template('login.html', form=form)
 
 
 @auth.route("/signup", methods=["GET", "POST"])
@@ -38,7 +36,7 @@ def signup():
     if form.errors:
         flash(str(form.errors).replace('[', '').replace(
             '{', '').replace('}', '').replace(']', ''), category='error')
-    return render_template('auth/base.html', signup_form=form, page_title="Sign Up", login_form=LoginForm())
+    return render_template('signup.html', form=form)
 
 
 @auth.route("/logout")
