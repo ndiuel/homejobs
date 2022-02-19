@@ -13,7 +13,7 @@ def login():
         return redirect(url_for('user.dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user:
             login_user(user, remember=form.remember.data)
             return redirect(request.args.get('next') or url_for('user.index'))
@@ -27,7 +27,6 @@ def signup():
         user = User(
                     email=form.email.data,
                     password=form.password.data,
-                    username=form.username.data,
                     )
         user.add_role('normal')
         user.save()
@@ -35,6 +34,7 @@ def signup():
             provider = Provider()
             provider.user_id = user.id 
             provider.save()
+            user.add_role('provider')
         flash("Account created successfully")
         return redirect(url_for('auth.login'))
     if form.errors:

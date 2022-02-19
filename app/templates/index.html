@@ -2,34 +2,24 @@
 
 {% block body %}
 <div class="pb-8">
-    <header class="bg-white border-b">
-        <nav class="flex items-center max-w-6xl h-20 justify-between px-6 mx-auto">
-            <a href="/" class="text-blue-900 font-medium text-xl tracking-wide">Homejobs</a>
-            <a class="w-12 h-12 rounded-full text-white bg-blue-900 flex justify-center items-center" href="/profile">
-                <i data-feather="user"></i>
-            </a>
-        </nav>
-    </header>
+    {% include "includes/header.html" %}
     <div class="mt-10 max-w-xl mx-auto">
         <!-- Search Form -->
-        <div class="px-6 tracking-normal">
+        <div class="px-2 tracking-normal">
             <form action="">
-                <div class="w-full">
-                    <input type="search" name="" id="" class="tracking-normal text-sm h-16 w-full rounded-lg  
-                        border border-blue-800 text-gray-800" placeholder="Describe The Service You'd Like..">
-                </div>
-                <div class="mt-4 flex justify-between md:justify-center space-x-5">
+                <div class="w-full flex">
                     <button
-                        class="bg-white text-blue-900 border border-blue-900 h-12 text-sm rounded-md py-2 tracking-wide px-8 flex items-center w-56 max-w-xs justify-center">
+                        class="text-blue-900 bg-sky-100 h-16 text-sm rounded-l-md py-2 tracking-wide flex items-center px-6 max-w-xs justify-center shadow-md">
                         <div class="flex space-x-4 items-center">
                             <i class="gg-menu-grid-o"></i>
-                            <span class="tracking-normal font-medium">Filter</span>
                         </div>
                     </button>
+                    <input type="search" name="" id="" class="tracking-normal text-sm h-16 w-full flex-grow
+                        shadow-md border-0 text-gray-800" placeholder="Describe The Service You'd Like..">
                     <button
-                        class="bg-blue-900 text-white text-sm py-2 px-8 h-12 rounded-md tracking-wide flex items-center w-56 max-w-xs justify-center">
+                        class="bg-sky-100 text-blue-900 text-sm py-2 h-16 rounded-r-md tracking-wide flex items-center px-6 max-w-xs justify-center shadow-md">
                         <div class="inline-flex space-x-4 items-center">
-                            <i class="gg-search"></i><span class="tracking-normal ">Search</span>
+                            <i class="gg-search"></i>
                         </div>
                     </button>
                 </div>
@@ -37,7 +27,7 @@
         </div>
     </div>
     <div class="mt-8 w-full mx-auto flex flex-wrap justify-center">
-        <p class="px-6 text-gray-600 tracking-tight w-full md:text-center text-sm">Top Search Results..</p>
+        <p class="px-6 text-gray-600 tracking-wide w-full md:text-center text-xs font-medium">Top Search Results..</p>
         <div class="mt-4 flex flex-wrap">
             <div class="py-2 px-5 max-w-md">
                 <div class="bg-sky-50 rounded-xl flex py-5 px-3 space-x-3 items-center">

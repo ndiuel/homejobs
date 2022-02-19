@@ -22,17 +22,16 @@
     {{field(class_='')}}
     <span class="text-xs tracking-widest text-gray-700 font-bold">{{field.label.text}}</span>
 </label>
-{% elif field.type == "SelectField" %}
+{% elif field.type == "SelectField" or field.type == "SelectMultipleField" %}
 <div class="relative">
-    {{field.label(class_="pb-1 font-semibold text-gray-600 block text-xs tracking-widest capitalize border-gray-300 rounded-lg")}}
-    {{field(class_="block w-full mt-1 text-sm px-2 py-2  ring-0  h-12 focus:outline-none focus:ring-0 bg-white border-0 shadow-lg rounded-lg
-    text-gray-700 tracking-widest")}}
+    {{field.label(class_="pb-1  text-sm text-gray-600 block tracking-wide capitalize ")}}
+    {{field(class_="block w-full mt-1 text-sm px-2 py-2  ring-0  h-12 focus:outline-none focus:ring-0 bg-white border rounded-lg border-gray-200
+    text-gray-700")}}
 </div>
 {% elif field.type == "TextAreaField" %}
 <div class="relative">
-    {{field.label(class_="pb-1 font-semibold text-gray-600 block text-xs tracking-widest capitalize border-gray-300 rounded-lg")}}
-    {{field(class_="block w-full mt-1 text-sm px-4 py-2  border ring-0 h-56
-    text-gray-700 tracking-widest")}}
+    {{field.label(class_="pb-1  text-sm text-gray-600 block tracking-wide capitalize ")}}
+    {{field(class_="block w-full mt-1 text-sm px-2 py-2  ring-0 h-56 focus:outline-none focus:ring-0 bg-white border rounded-lg border-gray-200 text-gray-700")}}
 </div>
 {% else %}
 <div class="relative">
@@ -66,17 +65,17 @@
     class="space-y-2 w-full mx-auto max-w-2xl mt-4 text-sm px-3 absolute top-28 z-50 left-1/2 transform -translate-x-1/2 font-normal">
     {% for category, message in messages%}
     {% if category=='error' %}
-    <div class="alert flex items-center border-l-4 border-r-4 border-negative bg-red-200 text-gray-700 py-5 w-full px-4 shadow-2xl"
+    <div class="alert flex items-center border border-red-600 text-red-600 bg-white py-5 w-full px-4 shadow-xl rounded-lg"
         x-data="{show: true}" x-show="show">
         {% else %}
-        <div class="alert flex border-l-4 border-primary border-r-4 bg-indigo-100 text-gray-700 py-5 w-full px-4 items-center shadow-2xl"
+        <div class="alert flex border border-blue-800 text-blue-800 py-5 bg-white w-full px-4 items-center shadow-xl rounded-lg"
             x-data="{show: true}" x-show="show">
             {% endif %}
             <p class="mr-4">{{message}}</p>
             {% if category=='error' %}
-            <i class="alert-close fa fa-times ml-auto text-red-700 text-lg" @click="show=false"></i>
+            <i class="alert-close  ml-auto text-red-700 gg-close" @click="show=false"></i>
             {% else %}
-            <i class="alert-close fa fa-times ml-auto text-xl text-gray-800" @click="show=false"></i>
+            <i class="alert-close ml-auto text-blue-800 gg-close" @click="show=false"></i>
             {% endif %}
         </div>
         {% endfor %}

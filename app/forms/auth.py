@@ -1,3 +1,4 @@
+import email
 from flask_wtf import FlaskForm as Form
 from wtforms import StringField, PasswordField, SubmitField, ValidationError, BooleanField
 from wtforms.validators import DataRequired, Length, Email
@@ -30,14 +31,15 @@ class LoginForm(Form):
     submit = SubmitField("Sign In")
     
     def validate_email(self, field):
-        user = User.query.filter_by(email=self.field.data).first()
-        if user:
-            flash("Email already in use")
-
+        user = User.query.filter_by(email=field.data).first()
+        if user is None:
+            flash("Incorrect email or password", category='error')
+            raise ValidationError("Email not accurate")
+        
     def validate_password(self, field):
-        user = User.query.filter_by(username=self.username.data).first()
+        user = User.query.filter_by(email=self.email.data).first()
         if user and not user.verify_password(field.data):
-            flash("Incorrect username or password", category='error')
+            flash("Incorrect email or password", category='error')
             raise ValidationError("Password is incorrect")
         
 
@@ -66,6 +68,7 @@ class SignUpForm(Form):
     def validate_email(self, field):
         if User.query.filter_by(email=field.data).first():
             raise ValidationError("Email already exists")
+        
         
 
     

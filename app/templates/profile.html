@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% include "includes/header.html" %}
+<div class="pb-8 px-6">
+    <div class="py-5 flex flex-col items-center">
+        {% if current_user.image_url %}
+        <img src="{{current_user.image_url}}" alt="profile image" class="w-32 h-32 mx-auto rounded-full object-cover">
+        {% else %}
+        <i class="gg-user text-gray-600 text-2xl"></i>
+        {% endif %}
+        <a
+            class="border border-blue-900 text-blue-900 py-2 px-8 mt-4 rounded-md text-xs font-medium space-x-2 tracking-normal mx-auto inline-flex items-center justify-center w-auto">
+            <i data-feather="edit" class="w-5 h-5"></i><span class="">Change Photo</span>
+        </a>
+    </div>
+    <div class="flex flex-wrap justify-around items-start">
+        <div class="mt-2 flex flex-col items-center bg-sky-50 rounded-lg w-full max-w-sm h-full">
+            <header class="flex px-8 py-4 justify-between tracking-normal text-gray-600 w-full items-center">
+                <h1 class="">Personal Info</h1>
+                <a class="text-blue-900">
+                    <i data-feather="edit"></i>
+                </a>
+            </header>
+            <div class="px-8 pb-4 space-y-2 w-full">
+                <div class="text-sm text-gray-600 w-full">
+                    <p class="font-medium mb-1">First Name</p>
+                    <p class="text-blue-900">{{current_user.firstname}}</p>
+                </div>
+                <div class="text-sm text-gray-600 w-full">
+                    <p class="font-medium mb-1">Last Name</p>
+                    <p class="text-blue-900">{{current_user.lastname}}</p>
+                </div>
+                <div class="text-sm text-gray-600 w-full">
+                    <p class="font-medium mb-1">Email</p>
+                    <p class="text-blue-900">{{current_user.email}}</p>
+                </div>
+                <div class="text-sm text-gray-600 w-full">
+                    <p class="font-medium mb-1">Phone No</p>
+                    <p class="text-blue-900">{{current_user.phone_no}}</p>
+                </div>
+            </div>
+        </div>
+        {% if current_user.has_role('provider') %} 
+        <div class="mt-8 flex flex-col items-center bg-sky-50 rounded-lg w-full max-w-sm h-full">
+            <header class="flex px-8 py-4 justify-between tracking-normal text-gray-600 w-full items-center">
+                <h1 class="">Address Info</h1>
+                <a class="text-blue-900">
+                    <i data-feather="edit"></i>
+                </a>
+            </header>
+            <div class="px-8 pb-4 space-y-2 w-full">
+                <div class="text-sm text-gray-600 w-full">
+                    <p class="font-medium mb-1">State</p>
+                    <p class="text-blue-900">{{provider.state}}</p>
+                </div>
+                <div class="text-sm text-gray-600 w-full">
+                    <p class="font-medium mb-1">L.G.A</p>
+                    <p class="text-blue-900">{{provider.lga}}</p>
+                </div>
+                <div class="text-sm text-gray-600 w-full">
+                    <p class="font-medium mb-1">Address</p>
+                    <p class="text-blue-900">{{provider.address}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 flex flex-col items-center bg-sky-50 rounded-lg w-full max-w-sm h-full">
+            <header class="flex px-8 py-3 justify-between tracking-normal text-gray-600 w-full items-center">
+                <h1 class="">Services Info</h1>
+                <a class="text-blue-900">
+                    <i data-feather="edit"></i>
+                </a>
+            </header>
+            <div class="px-8 pb-4 space-y-2 w-full">
+                <div class="text-sm text-gray-600 w-full">
+                    <p class="text-medium">About</p>
+                    <p class="text-blue-900">{{provider.about}}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    
+</div>
+{% endblock %}

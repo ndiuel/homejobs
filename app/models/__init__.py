@@ -9,6 +9,7 @@ from .base import BaseModel
 from .user import User
 from .role import Role, UserRoles
 from .provider import Provider
+from .service import Service, ProviderService
 
 
 def init_app(app):
