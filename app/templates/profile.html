@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        {% if current_user.has_role('provider') %} 
+        {% if current_user.has_role('provider') %}
         <div class="mt-8 flex flex-col items-center bg-sky-50 rounded-lg w-full max-w-sm h-full">
             <header class="flex px-8 py-4 justify-between tracking-normal text-gray-600 w-full items-center">
                 <h1 class="">Address Info</h1>
@@ -76,10 +76,16 @@
                     <p class="text-medium">About</p>
                     <p class="text-blue-900">{{provider.about}}</p>
                 </div>
+                <div class="text-sm text-gray-600 w-full">
+                    <p class="text-medium">Services</p>
+                    <ul class="flex">
+                        <li class="text-blue-900">{{services}}</li>
+                    </ul>
+                </div>
             </div>
         </div>
         {% endif %}
     </div>
-    
+
 </div>
 {% endblock %}
