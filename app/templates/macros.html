@@ -3,7 +3,7 @@
 {{field()}}
 {% elif field.type == "SubmitField" %}
 <div class="relative">
-    {{field(class="h-12 shadow-sm text-white block text-sm tracking-wider bg-blue-900
+    {{field(class="h-12 shadow-sm text-white block text-sm tracking-wider bg-blue-700
     items-center justify-center rounded-lg
     focus:ring-4 focus:outline-none outline-none focus:ring-opacity-50 px-4 w-full")}}
 </div>
@@ -13,7 +13,7 @@
     {% if dark %}
     <span class="text-xs tracking-widest text-white font-bold">{{field.label.text}}</span>
     {% else %}
-    <span class="tracking-wide my-2 text-gray-600 text-sm">{{field.label.text}}</span>
+    <span class="tracking-wide my-2 text-gray-700 text-sm">{{field.label.text}}</span>
     {% endif %}
 
 </label>
@@ -24,18 +24,18 @@
 </label>
 {% elif field.type == "SelectField" or field.type == "SelectMultipleField" %}
 <div class="relative">
-    {{field.label(class_="pb-1  text-sm text-gray-600 block tracking-wide capitalize ")}}
+    {{field.label(class_="pb-1  text-sm text-gray-700 block tracking-wide capitalize ")}}
     {{field(class_="block w-full mt-1 text-sm px-2 py-2  ring-0  h-12 focus:outline-none focus:ring-0 bg-white border rounded-lg border-gray-200
     text-gray-700")}}
 </div>
 {% elif field.type == "TextAreaField" %}
 <div class="relative">
-    {{field.label(class_="pb-1  text-sm text-gray-600 block tracking-wide capitalize ")}}
+    {{field.label(class_="pb-1  text-sm text-gray-700 block tracking-wide capitalize ")}}
     {{field(class_="block w-full mt-1 text-sm px-2 py-2  ring-0 h-56 focus:outline-none focus:ring-0 bg-white border rounded-lg border-gray-200 text-gray-700")}}
 </div>
 {% else %}
 <div class="relative">
-    {{field.label(class_="pb-1  text-sm text-gray-600 block tracking-wide capitalize ")}}
+    {{field.label(class_="pb-1  text-sm text-gray-700 block tracking-wide capitalize ")}}
     {{field(class_="block w-full mt-1 text-sm px-2 py-2  ring-0  h-12 focus:outline-none focus:ring-0 bg-white border rounded-lg border-gray-200
     text-gray-700")}}
 </div>

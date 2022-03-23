@@ -24,3 +24,7 @@ class Provider(db.Model, BaseModel):
         )
     )
     
+    @property
+    def services_to_str(self):
+        return ", ".join(service.name for service in self.services)
+    

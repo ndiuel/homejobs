@@ -1,76 +1,104 @@
 <div class="mt-4 flex flex-wrap">
     {% for provider in providers %}
-    <div class="py-2 px-5 max-w-md">
-        <div class="bg-sky-50 rounded-xl flex py-5 px-3 space-x-3 items-center">
-            <div class="">
-                <img src="{{provider.user.image_url}}" alt="" class="rounded-full">
+    <div class="py-2 px-5 max-w-md" x-data="{showMore: false}">
+        <div class="bg-sky-50 rounded-xl flex flex-col justify-center py-5 px-3 items-center">
+            <div class="mb-4">
+                <img src="{{provider.user.image_url}}" alt="" class="rounded-full w-24 h-24">
             </div>
             <div class="tracking-normal">
-                <h1 class="text-gray-700 mb-1 font-medium text-lg tracking-normal">{{provider.user.firstname}} {{provider.user.lastname}}</h1>
-                <div class="text-gray-600 flex space-x-1">
-                    <div class="text-blue-800">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                            fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="feather feather-star">
-                            <polygon
-                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                            </polygon>
-                        </svg>
-                    </div>
-
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="feather feather-star">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                        </polygon>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="feather feather-star">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                        </polygon>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="feather feather-star">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                        </polygon>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                        fill="none" fill="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="feather feather-star">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                        </polygon>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                        fill="none" fill="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" class="feather feather-star">
-                        <polygon
-                            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
-                        </polygon>
-                    </svg>
+                <h1 class="text-gray-700 mb-1 tracking-normal text-center">
+                    {{provider.user.firstname}} {{provider.user.lastname}}</h1>
+                <div class="text-gray-700 flex space-x-1 justify-center text-center w-auto mx-auto">
+                    <i class="fa fa-star text-blue-700"></i>
+                    <i class="fa fa-star text-gray-300"></i>
+                    <i class="fa fa-star text-gray-300"></i>
+                    <i class="fa fa-star text-gray-300"></i>
+                    <i class="fa fa-star text-gray-300"></i>
                 </div>
                 <div>
-                    <p class="text-sm tracking-wide mt-2 text-gray-600">
+                    <p class="text-sm tracking-wide mt-2 text-gray-700">
                         {{provider.about}}
                     </p>
                 </div>
                 <div class="flex justify-center space-x-2">
                     <button
-                        class="w-full border border-blue-900 text-blue-900 text-sm py-2 px-2 mt-4  rounded-md  space-x-2 tracking-normal flex items-center justify-center">
+                        class="w-full border border-blue-700 text-blue-700 text-sm py-2 px-2 mt-4  rounded-md  space-x-2 tracking-normal flex items-center justify-center">
                         <i class="fa fa-envelope text-lg"></i><span class="">Chat</span>
                     </button>
-                    <button
-                        class="w-full bg-blue-900 text-white text-sm py-2 px-2 mt-4 rounded-md  space-x-2 tracking-normal flex items-center justify-center">
+                    <button @click="showMore=true"
+                        class="w-full bg-blue-700 text-white text-sm py-2 px-2 mt-4 rounded-md  space-x-2 tracking-normal flex items-center justify-center">
                         <i data-feather="info"></i><span class="">More..</span>
                     </button>
-
+                    <button
+                        class="w-full border border-blue-700 text-blue-700 text-sm py-2 px-2 mt-4  rounded-md  space-x-2 tracking-normal flex items-center justify-center">
+                        <i class="fa fa-flag text-lg"></i><span class="">Report</span>
+                    </button>
                 </div>
-
+            </div>
+        </div>
+        <div x-cloak class="fixed bottom-0 right-0 left-0 bg-white py-8 px-6 shadow-xl text-gray-700 overflow-y-auto"
+            style="border-top-left-radius: 50px; border-top-right-radius: 50px;" x-show="showMore"
+            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="transform translate-y-full"
+            x-transition:enter-end="transform translate-y-0" x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="transform translate-y-0" x-transition:leave-end="transform translate-y-full">
+            <div class="flex justify-between text-gray-700">
+                <h1 class="font-bold text-lg"></h1>
+                <button class="" @click="showMore=false">
+                    <i data-feather="x"></i>
+                </button>
+            </div>
+            <div class="py-2 flex flex-col items-center">
+                {% if provider.user.image_url %}
+                <img src="{{provider.user.image_url}}" alt="profile image"
+                    class="w-32 h-32 mx-auto rounded-full object-cover">
+                {% else %}
+                <i class="gg-user text-gray-700 text-2xl"></i>
+                {% endif %}
+                <h1 class="text-gray-700 mb-1 text-lg tracking-normal text-center mt-2">
+                    {{provider.user.firstname}} {{provider.user.lastname}}</h1>
+                <div class="text-gray-700 flex space-x-1 justify-center text-center w-auto mx-auto">
+                    <i class="fa fa-star text-blue-700 text-xl"></i>
+                    <i class="fa fa-star text-gray-300 text-xl"></i>
+                    <i class="fa fa-star text-gray-300 text-xl"></i>
+                    <i class="fa fa-star text-gray-300 text-xl"></i>
+                    <i class="fa fa-star text-gray-300 text-xl"></i>
+                </div>
+                <div class="flex justify-center space-x-4 mt-2">
+                    <a class="text-blue-700">
+                        <i class="fa fa-phone text-2xl"></i>
+                    </a>
+                    <a class="text-blue-700">
+                        <i class="fa fa-envelope text-2xl"></i>
+                    </a>
+                </div>
+                <div class="text-gray-700 w-full tracking-normal">
+                    <p class=" text-lg">About</p>
+                    <p class="text-sm">{{provider.about}}</p>
+                </div>
+                <div class="text-gray-700 w-full mt-2 tracking-normal">
+                    <p class=" text-lg">Services</p>
+                    <ul class="flex">
+                        <li class="text-sm">{{provider.services_to_str}}</li>
+                    </ul>
+                </div>
+                <div class="text-gray-700 w-full mt-2 tracking-normal">
+                    <p class="text-lg">Email</p>
+                    <p class="text-sm">{{provider.user.email}}</p>
+                </div>
+                <div class="text-gray-700 w-full mt-2 tracking-normal">
+                    <p class=" text-lg">Phone Number</p>
+                    <p class="text-sm">{{provider.user.phone_no}}</p>
+                </div>
+                <div class="flex justify-center space-x-2 mt-4 w-full">
+                    <button
+                        class="w-full bg-blue-700 text-white text-sm py-2 px-2 mt-4 rounded-md  space-x-2 tracking-normal flex items-center justify-center">
+                        <i data-feather="star"></i><span class="">Rate</span>
+                    </button>
+                    <button
+                        class="w-full border border-blue-700 text-blue-700 text-sm py-2 px-2 mt-4  rounded-md  space-x-2 tracking-normal flex items-center justify-center">
+                        <i class="fa fa-comments text-lg"></i><span class="">Reviews</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

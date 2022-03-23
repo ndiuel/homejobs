@@ -50,7 +50,7 @@ def profile():
     return render_template("profile.html", services=services, provider=provider) 
 
 @user.route("/change_image", methods=["POST", "GET"])
-@roles_required("provider")
+@roles_required("normal")
 def change_image():
     form = ChangeImageForm()
     if form.validate_on_submit():
@@ -64,7 +64,7 @@ def change_image():
         current_user.save()
         flash("Image Changed")
         return redirect(url_for(".profile"))
-    return render_template("form.html", form=form, form_title="Change Image")
+    return render_template("form.html", form=form, form_title="Change Profile Image")
 
 
 @user.route("/change_personal_info", methods=["POST", "GET"])
@@ -147,7 +147,9 @@ def change_about_info():
     if provider is None:
         flash("User not found", category='error')
         return redirect(request.referrer)
-    form = AboutForm()(about=provider.about, skills=[(s.id, s.name) for s in provider.services])
+    form = AboutForm()(about=provider.about)
+    if request.method == "GET":
+        form.skills.data = [(s.id) for s in provider.services]
     if form.validate_on_submit():
         provider.about = form.about.data
         for skill in form.skills.data:
