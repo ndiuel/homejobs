@@ -12,10 +12,11 @@ def paginate(query):
     
 
 def upload_file(file):
-    url = 'https://api.cloudinary.com/v1_1/dnpxiezya/upload'
-    UPLOAD_PRESET = 'rafsjzaw'
+    url = 'https://api.cloudinary.com/v1_1/dq8nv0pj6/upload'
+    UPLOAD_PRESET = 'tsyyldp2'
     r = requests.post(url, files={'file': file.read()}, data={
                       'upload_preset': UPLOAD_PRESET})
+    print(r, r.content)
     try:
         return r.json().get('secure_url')
     except:

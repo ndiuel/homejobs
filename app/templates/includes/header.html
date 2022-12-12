@@ -3,14 +3,14 @@
         <a href="/" class="text-blue-700 font-semibold text-xl tracking-wide">homejobs</a>
         <div class="flex space-x-2">
             <a class="w-12 h-12 rounded-full bg-green-50 text-green-700 flex justify-center items-center" href="">
-                <i data-feather="mail"></i>
+                <i class="fa fa-envelope"></i>
             </a>
             <a class="w-12 h-12 rounded-full bg-sky-50 text-blue-700 flex justify-center items-center" href="/profile">
-                <i data-feather="user"></i>
+                <i class="fa fa-user"></i>
             </a>
             {% if current_user.is_authenticated %}
             <a href="/logout" class="w-12 h-12 rounded-full bg-pink-50 text-red-600 flex justify-center items-center">
-                <i data-feather="log-out"></i>
+                <i class="fa fa-sign-out-alt"></i>
             </a>
             {% endif %}
         </div>

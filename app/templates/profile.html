@@ -10,16 +10,16 @@
         <i class="gg-user text-gray-700 text-2xl"></i>
         {% endif %}
         <a  href="/change_image"
-            class="border border-blue-700 text-blue-700 py-2 px-8 mt-4 rounded-md text-xs font-medium space-x-2 tracking-normal mx-auto inline-flex items-center justify-center w-auto">
+            class="border border-blue-700 text-blue-700 py-2 px-8 mt-4 rounded-md text-sm font-medium space-x-2 tracking-normal mx-auto inline-flex items-center justify-center w-auto">
             <i data-feather="edit" class="w-5 h-5"></i><span class="">Change Photo</span>
         </a>
     </div>
-    <div class="flex flex-wrap justify-around items-start">
+    <div class="flex flex-wrap justify-around items-start font-semibold">
         <div class="mt-2 flex flex-col items-center bg-sky-50 rounded-lg w-full max-w-sm h-full">
             <header class="flex px-8 py-4 justify-between tracking-normal text-gray-700 w-full items-center">
-                <h1 class="">Personal Info</h1>
+                <h1 class="text-gray-600">Personal Info</h1>
                 <a class="text-blue-700" href="/change_personal_info">
-                    <i data-feather="edit"></i>
+                    <i class="fa fa-edit"></i>
                 </a>
             </header>
             <div class="px-8 pb-4 space-y-2 w-full">
@@ -44,9 +44,9 @@
         {% if current_user.has_role('provider') %}
         <div class="mt-8 flex flex-col items-center bg-sky-50 rounded-lg w-full max-w-sm h-full">
             <header class="flex px-8 py-4 justify-between tracking-normal text-gray-700 w-full items-center">
-                <h1 class="">Address Info</h1>
+                <h1 class="text-gray-600">Address Info</h1>
                 <a class="text-blue-700" href="/change_address_info">
-                    <i data-feather="edit"></i>
+                    <i class="fa fa-edit"></i>
                 </a>
             </header>
             <div class="px-8 pb-4 space-y-2 w-full">
@@ -66,9 +66,9 @@
         </div>
         <div class="mt-8 flex flex-col items-center bg-sky-50 rounded-lg w-full max-w-sm h-full">
             <header class="flex px-8 py-3 justify-between tracking-normal text-gray-700 w-full items-center">
-                <h1 class="">Services Info</h1>
+                <h1 class="text-gray-600">Services Info</h1>
                 <a class="text-blue-700" href="/change_about_info">
-                    <i data-feather="edit"></i>
+                    <i class="fa fa-edit"></i>
                 </a>
             </header>
             <div class="px-8 pb-4 space-y-2 w-full">
