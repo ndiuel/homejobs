@@ -7,19 +7,53 @@
             <i class="fa fa-home text-sm"></i>
             <span>Home</span>
         </a>
-        
+
         <a href="" class="flex py-4 px-4 space-x-3 items-center hover:text-primary">
             <i class="fa fa-envelope text-sm"></i>
             <span>Messages</span>
 
         </a>
-        <a href="" class="flex py-4 px-4 space-x-3 items-center hover:text-primary">
+        <a href="/profile" class="flex py-4 px-4 space-x-3 items-center hover:text-primary">
             <i class="fa fa-user text-sm"></i>
             <span>Profile</span>
         </a>
     </aside>
     <div class="h-full flex-col flex w-full max-h-full">
         {% include "includes/header.html" %}
+        {% if current_user.has_role('provider') %}
+        <div class="h-full overflow-y-auto px-6 py-6 sm:flex max-w-xl mx-auto w-full sm:space-x-4">
+            <div class="mt-4 w-full max-w-sm rounded-lg px-4 py-6 flex bg-sky-50 shadow-md">
+                <div class="w-10 min-h-full flex items-center justify-center">
+                    <i class="fa fa-traffic-light text-primary"></i>
+                </div>
+                <div>
+                    <h1 class="text-xs font-semibold text-gray-600">Profile Visits</h1>
+                    <p class="font-semibold text-blue-700 text-xl">{{provider.profile_views | money}}</p>
+                </div>
+            </div>
+            <div class="mt-4 w-full max-w-sm rounded-lg px-4 py-6 flex bg-sky-50 shadow-md">
+                <div class="w-10 min-h-full flex items-center justify-center">
+                    <i class="fa fa-star text-primary"></i>
+                </div>
+                <div>
+                    <h1 class="text-xs font-semibold text-gray-600">Rating</h1>
+                    <p class="font-semibold text-blue-700 text-xl">{{provider.rating | money}}</p>
+                </div>
+            </div>
+
+
+            <div class="mt-4 w-full max-w-sm rounded-lg px-4 py-6 flex bg-sky-50 shadow-md">
+                <div class="w-10 min-h-full flex items-center justify-center">
+                    <i class="fa fa-magnifying-glass text-primary"></i>
+                </div>
+                <div>
+                    <h1 class="text-xs font-semibold text-gray-600">Reviews</h1>
+                    <p class="font-semibold text-blue-700 text-xl">{{provider.reviews.count() | money}}</p>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
         <div class="h-full overflow-y-auto py-6">
             <div class="break-words text-gray-800 sm:text-center  px-5">
                 <h1 class="text-lg text-center sm:text-2xl font-semibold text-gray-600 capitalize">Find a suitable
@@ -34,17 +68,19 @@
                         {% for service in services %}
                         <div class="flex space-x-2 items-center mb-2">
                             <input type="checkbox" name="services" id="{{service.name}}" value="{{service.name}}"
-                                class="rounded-sm text-blue-800 focus:ring-0" {% if service.name in selected_services %}checked{% endif %}>
+                                class="rounded-sm text-blue-800 focus:ring-0" {% if service.name in selected_services
+                                %}checked{% endif %}>
                             <span class="text-gray-500 font-semibold text-sm">{{service.name}}</span>
                         </div>
                         {% endfor %}
                     </div>
-                    <div class="bg-white absolute rounded-lg px-4 py-4 top-10 right-3 shadow-md" x-show="showLocation" x-cloak
-                        @click.away="showLocation=false">
+                    <div class="bg-white absolute rounded-lg px-4 py-4 top-10 right-3 shadow-md" x-show="showLocation"
+                        x-cloak @click.away="showLocation=false">
                         <p class="text-blue-700 text-sm text-center mb-3 font-semibold">Select Your Location</p>
                         {% for location in locations %}
                         <div class="flex space-x-2 items-center mb-2">
-                            <input type="radio" name="location" id="{{location}}" value="{{location}}" {% if location == selected_location %}checked{% endif %}
+                            <input type="radio" name="location" id="{{location}}" value="{{location}}" {% if
+                                location==selected_location %}checked{% endif %}
                                 class="rounded-full text-blue-800 focus:ring-0">
                             <span class="text-gray-500 font-semibold text-sm">{{location}}</span>
                         </div>
@@ -84,8 +120,8 @@
             <div class="flex justify-between mt-6 items-center text-gray-600 max-w-3xl mx-auto  px-5 flex-wrap">
                 {% if searched %}
                 <h1 class="font-semibold">Search Results</h1>
-                {% else %} 
-                {% if form_used %} 
+                {% else %}
+                {% if form_used %}
                 <p class="text-lg mb-2 text-center w-full">No search results found!!</p>
                 {% endif %}
                 <h1 class="font-semibold">Top Rated Providers</h1>
@@ -94,10 +130,11 @@
             </div>
             <div class="mt-6">
                 {% for provider in providers %}
-                <a class="px-5 py-5 border-b border-gray-300 flex w-full" href="{{url_for('.provider', id=provider.id)}}">
+                <a class="px-5 py-5 border-b border-gray-300 flex w-full"
+                    href="{{url_for('.provider', id=provider.id)}}">
                     <img src="{{provider.user.image_url}}" alt="" class="rounded-full w-16 h-16">
                     <div class="ml-4 flex flex-col justify-center text-gray-700 space-y-1">
-                        <p class="font-semibold">{{provider.user.firstname}} {{provider.user.lastname}}</p>
+                        <p class="font-semibold">{{provider.user.first_name}} {{provider.user.last_name}}</p>
                         <p class="text-xs font-medium">{{provider.services_to_str}}</p>
                         <div class="text-gray-300 w-auto">
                             {% set rating = provider.rating or 1 %}
@@ -116,8 +153,7 @@
                 {% endfor %}
             </div>
         </div>
-
-
+        {% endif %}
         {% include "includes/footer.html" %}
     </div>
 </div>

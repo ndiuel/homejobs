@@ -12,6 +12,7 @@ from .provider import Provider
 from .service import Service, ProviderService
 from .rating import Rating
 from .review import Review
+from .chats import Chat, ChatMessages, ChatViews
 
 
 def init_app(app):

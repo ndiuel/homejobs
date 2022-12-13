@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% include "includes/header.html" %}
+<div class="pb-12 px-6 min-h-full overflow-y-auto border-b">
+    <div class="placeholder-sky-300 flex flex-col items-center py-3">
+        <img src="{{other.image_url}}" alt="profile image" class="w-32 h-32 mx-auto rounded-full object-cover">
+    </div>
+    <h1 class="px-4  text-gray-600 text-center text-xs font-semibold">{{other.first_name}}
+        {{other.last_name}}</h1>
+    <h1 class="px-4  text-blue-700 text-center font-semibold">Chats</h1>
+    <div class="" id="chats">
+    </div>
+</div>
+
+<form id="chatForm" class="bottom-0 right-0 left-0 fixed h-12">
+    <div class="w-full bg-white h-full border-t border-blue-500 flex">
+        <input type="text" name="chatMsg" id="chatMsg"
+            class="w-full h-12 px-4 py-2 text-sm border-0 outline-none ring-0" placeholder="Enter Your Message Here..">
+        <button class="p-4 bg-primary h-full">
+            <i class="fa fa-paper-plane text-white "></i>
+        </button>
+    </div>
+</form>
+
+<script>
+    const chats = document.getElementById("chats")
+    const chatForm = document.getElementById("chatForm")
+
+    chatForm.onsubmit = e => {
+        e.preventDefault()
+        let val = chatForm.chatMsg.value
+        if (val) {
+            fetch('/chat/new/{{chat.id}}', {
+                'method': 'POST',
+                'body': JSON.stringify(
+                    { msg: val }
+                )
+            }).then(r => {
+                renderChats()
+                chatForm.chatMsg.value = ''
+            })
+        }
+    }
+
+    const renderChats = () => {
+        console.log('render')
+        fetch("/chats/{{chat.id}}").then(
+            r => r.json()
+        ).then(r => {
+            chats.innerHTML = r.html
+        })
+        setTimeout(renderChats, 3000)
+    }
+    renderChats()
+</script>
+{% endblock %}

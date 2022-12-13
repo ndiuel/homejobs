@@ -6,7 +6,7 @@ from ..decorators import roles_required
 from . import csrf
 from ..forms.user import AboutForm, ChangeImageForm, PersonalInfoForm, AddressForm, VerificationForm, ChangePersonalInfoForm, ReviewForm
 from ..utils import upload_file
-from ..models import Provider, User, Service, ProviderService, Review, Rating
+from ..models import Provider, User, Service, ProviderService, Review, Rating, Chat, ChatViews, ChatMessages
 
 user = Blueprint('user', __name__)
 
@@ -42,9 +42,10 @@ def index():
     selected_location = request.args.get('location')
     selected_services = sq
    
-    if current_user.is_authenticated and current_user.has_role("provider"):
-        if current_user.firstname is None:
+    if current_user.is_authenticated:
+        if current_user.first_name is None:
             return redirect(url_for('.upload_personal_info'))
+    if current_user.is_authenticated and current_user.has_role("provider"):
         provider = Provider.query.filter_by(user_id=current_user.id).first()
         if provider and provider.identification_doc_url is None:
             return redirect(url_for("user.upload_identity_info"))
@@ -53,7 +54,7 @@ def index():
         if provider and provider.about is None:
             return redirect(url_for("user.upload_about_info"))
     providers, searched, form_used = search_providers()
-    return render_template("index.html", form_used=form_used, providers=providers, searched=searched, services=Service.query.all(), locations=['Lagos', 'Akwa Ibom'], selected_location=selected_location, selected_services=selected_services)
+    return render_template("index.html", form_used=form_used, providers=providers, searched=searched, services=Service.query.all(), locations=['Lagos', 'Akwa Ibom'], selected_location=selected_location, selected_services=selected_services, provider = Provider.query.filter_by(user_id=current_user.id).first())
 
 
 @user.route("/profile")
@@ -84,12 +85,12 @@ def change_image():
 
 
 @user.route("/change_personal_info", methods=["POST", "GET"])
-@roles_required("provider")
+@login_required
 def change_personal_info():
     form = ChangePersonalInfoForm(obj=current_user)
     if form.validate_on_submit():
-        current_user.firstname = form.firstname.data
-        current_user.lastname = form.lastname.data
+        current_user.first_name = form.first_name.data
+        current_user.last_name = form.last_name.data
         current_user.phone_no = form.phone_no.data
         current_user.save()
         flash("Personal Information Saved")
@@ -98,7 +99,7 @@ def change_personal_info():
 
 
 @user.route("/upload_personal_info", methods=["POST", "GET"])
-@roles_required("provider")
+@login_required
 def upload_personal_info():
     form = PersonalInfoForm()
     if form.validate_on_submit():
@@ -109,12 +110,12 @@ def upload_personal_info():
         else:
             flash("Error occured image could not be uploaded")
             return request(redirect.referrer)
-        current_user.firstname = form.firstname.data
-        current_user.lastname = form.lastname.data
+        current_user.first_name = form.first_name.data
+        current_user.last_name = form.last_name.data
         current_user.phone_no = form.phone_no.data
         current_user.save()
         flash("Personal Information Saved")
-        return redirect(url_for(".upload_address_info"))
+        return redirect(url_for(".index"))
     return render_template("form.html", form=form, form_title="Personal Information")
 
 
@@ -262,6 +263,94 @@ def rate(id):
     provider.save()
     flash("Your rating has been saved")
     return redirect(url_for('.provider', id=provider.id))
+
+
+@user.route("/chat/<int:id>", methods=["POST", "GET"])
+@login_required
+def chat(id):
+    user = User.query.get_or_404(id)
+    
+    chat = Chat.query.filter((Chat.user_1_id == user.id) | (Chat.user_2_id == user.id))
+    chat = chat.filter((Chat.user_1_id == current_user.id) | (Chat.user_2_id == current_user.id)).first()
+    if chat is None:
+        chat = Chat()
+        chat.user_1_id = user.id
+        chat.user_2_id = current_user.id 
+        chat.save()
+    
+    if chat.user_1_id != current_user.id and chat.user_2_id != current_user.id:
+        abort(403)
+    
+    if id == current_user.id:
+        abort(403)
+    chatview = ChatViews()
+    chatview.chat_id = chat.id 
+    chatview.user_id = current_user.id 
+    chatview.save()
+    other = chat.user_1_id
+    if other == current_user.id:
+        other = chat.user_2_id
+    other = User.query.filter_by(id=id).first()
+    return render_template('chat.html', chat=chat, other=other)
+    
+    
+@user.route("/chats/<int:id>")    
+@login_required
+def chats(id):
+    chat = Chat.query.get_or_404(id)
+    msgs = ChatMessages.query.filter_by(chat_id=chat.id).order_by(ChatMessages.date_created.desc())
+    html = render_template('_chat.html', chats=msgs)
+    return {'html': html}
+
+
+@user.route("/chat/new/<int:id>", methods=["POST"])
+@login_required
+@csrf.exempt
+def new_chat(id):
+    chat = Chat.query.get_or_404(id)
+    data = request.get_json(force=True)
+    msg = data.get('msg', '')
+    print(msg)
+    if msg:
+        chat_msg = ChatMessages()
+        chat_msg.sender_id = current_user.id 
+        chat_msg.message = msg 
+        chat_msg.chat_id = chat.id
+        chat_msg.save()
+        chat.updated += 1
+        chat.save()
+    return ''
+    
+def other(chat):
+    id = chat.user_1_id if current_user.id == chat.user_2_id else chat.user_2_id
+    return User.query.filter_by(id=id).first()
+
+def last_msg(chat):
+    chat = ChatMessages.query.filter_by(chat_id=chat.id).order_by(ChatMessages.date_created.desc()).first()
+    if chat:
+        return chat.message 
+    else:
+        return ''
+    
+def is_new_chat(chat):
+    view = ChatViews.query.filter_by(user_id=current_user.id).order_by(ChatViews.date_created.desc()).first()
+    return view and view.date_created < chat.date_modified
+
+@user.route("/messages")
+@login_required
+def messages():
+    return render_template("messages.html", chats=Chat.query.filter((Chat.user_1_id == current_user.id) | (Chat.user_2_id == current_user.id)), other=other, last_msg=last_msg,
+                           is_new_chat=is_new_chat)
+
+
+@user.route("/reviews")
+@roles_required('provider')
+def reviews():
+    provider = Provider.query.filter_by(user_id=current_user.id).first()
+    return render_template("reviews.html", provider=provider)
+
+
+
     
     
     

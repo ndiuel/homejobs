@@ -6,8 +6,8 @@ from ..models import Service
 
 
 class PersonalInfoForm(Form):
-    firstname = StringField("First Name", validators=[DataRequired()])
-    lastname = StringField("Last Name", validators=[DataRequired()])
+    first_name = StringField("First Name", validators=[DataRequired()])
+    last_name = StringField("Last Name", validators=[DataRequired()])
     phone_no = StringField("Phone No", validators=[DataRequired()], render_kw={'inputmode': 'tel'})
     image = FileField("Upload Profile Image", validators=[FileRequired()])
     submit = SubmitField("Submit")
@@ -19,8 +19,8 @@ class ChangeImageForm(Form):
     
 
 class ChangePersonalInfoForm(Form):
-    firstname = StringField("First Name", validators=[DataRequired()])
-    lastname = StringField("Last Name", validators=[DataRequired()])
+    first_name = StringField("First Name", validators=[DataRequired()])
+    last_name = StringField("Last Name", validators=[DataRequired()])
     phone_no = StringField("Phone No", validators=[DataRequired()], render_kw={'inputmode': 'tel'})
     submit = SubmitField("Submit")
     

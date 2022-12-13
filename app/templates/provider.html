@@ -2,12 +2,12 @@
 
 {% block body %}
 {% include "includes/header.html" %}
-<div class="pb-8 px-6 min-h-full overflow-y-auto">
+<div class="pb-16 px-6 min-h-full overflow-y-auto">
     <div class="placeholder-sky-300 flex flex-col items-center py-3">
         <img src="{{provider.user.image_url}}" alt="profile image" class="w-32 h-32 mx-auto rounded-full object-cover">
     </div>
-    <h1 class="px-4  text-blue-700 text-center text-lg font-semibold">{{provider.user.firstname}}
-        {{provider.user.lastname}}</h1>
+    <h1 class="px-4  text-blue-700 text-center text-lg font-semibold">{{provider.user.first_name}}
+        {{provider.user.last_name}}</h1>
     <div class="flex max-w-md mx-auto mt-2 text-gray-600 justify-between items-end space-x-2">
         <p class="text-lg font-semibold break-words">{{provider.services_to_str}}</p>
         <div class="space-x-2 flex text-white">
@@ -33,7 +33,7 @@
         <i class="fa fa-star {% if rating >= 5 %}text-primary {% endif %}"></i>
     </div>
     <div class="flex space-x-3 mt-4 justify-center max-w-sm mx-auto">
-        <a href=""
+        <a href="{{url_for('.chat', id=provider.id)}}""
             class="font-semibold w-full rounded-md flex items-center justify-center text-center bg-primary text-white text-xs px-5 py-3"><i
                 class="fa fa-message mr-2"></i> Chat</a>
         <a href="{{url_for('.review', id=provider.id)}}"
@@ -59,7 +59,7 @@
                 <i class="fa fa-user text-primary text-lg"></i>
                 {% endif %}
                 <div class="ml-4 flex flex-col justify-center text-gray-700 space-y-1">
-                    <p class="font-semibold">{{review.user.firstname}} {{review.user.lastname}}</p>
+                    <p class="font-semibold">{{review.user.first_name}} {{review.user.last_name}}</p>
                     <p class="text-sm font-semibold">{{review.content}}</p>
                 </div>
             </div>

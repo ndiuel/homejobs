@@ -1,0 +1,5 @@
+{% for chat in chats %}
+<div class="flex w-full p-2 font-semibold text-sm {% if current_user.id == chat.sender_id %}justify-end{% endif %}">
+<p class="{% if current_user.id == chat.sender_id %}bg-primary text-white rounded-md p-3 w-auto{% else %}w-1/2 bg-white shadow-md rounded-md text-primary p-4{% endif %}" >{{chat.message}}</p>
+</div>
+{% endfor %}

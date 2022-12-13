@@ -18,9 +18,8 @@ class User(UserMixin, db.Model, BaseModel):
         unique=True,
         index=True
     )
-    firstname = db.Column(
+    first_name = db.Column(
         db.String(64),
-        unique=True,
         index=True
     )
     username = db.Column(
@@ -28,9 +27,8 @@ class User(UserMixin, db.Model, BaseModel):
         unique=True,
         index=True
     )
-    lastname = db.Column(
+    last_name = db.Column(
         db.String(64),
-        unique=True,
         index=True
     )
     image_url = db.Column(db.Text)

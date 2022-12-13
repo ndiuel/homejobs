@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% include "includes/header.html" %}
+<div class="pb-16 px-6 min-h-full overflow-y-auto">
+    <div class="mt-5 max-w-md mx-auto">
+        <h1 class="text-primary text-lg font-semibold">Messages</h1>
+        <div class="">
+            {% for chat in chats %}
+
+            <a class="py-5 border-b border-gray-300 flex w-full items-center" href="{{url_for('.chat', id=other(chat).id)}}">
+                {% if other(chat).image_url %}
+                <img src="{{other(chat).image_url}}" alt="" class="rounded-full w-16 h-16">
+                {% else %}
+                <i class="fa fa-user text-primary text-lg"></i>
+                {% endif %}
+                <div class="ml-4 flex flex-col justify-center text-gray-700 space-y-1">
+                    <p class="font-semibold">{{other(chat).first_name}} {{other(chat).last_name}}</p>
+                    <p class="text-sm font-semibold {% if is_new_chat(chat) %}text-primary{% endif %}">{{last_msg(chat)}}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% include "includes/footer.html" %}
+{% endblock %}

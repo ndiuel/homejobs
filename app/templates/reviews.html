@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% include "includes/header.html" %}
+<div class="pb-16 px-6 min-h-full overflow-y-auto">
+    <div class="mt-5 max-w-md mx-auto">
+        <h1 class="text-primary text-lg font-semibold">Reviews</h1>
+        <div class="">
+            {% for review in provider.reviews %}
+
+            <div class="py-5 border-b border-gray-300 flex w-full items-center">
+                {% if review.user.image_url %}
+                <img src="{{review.user.image_url}}" alt="" class="rounded-full w-16 h-16">
+                {% else %}
+                <i class="fa fa-user text-primary text-lg"></i>
+                {% endif %}
+                <div class="ml-4 flex flex-col justify-center text-gray-700 space-y-1">
+                    <p class="font-semibold">{{review.user.first_name}} {{review.user.last_name}}</p>
+                    <p class="text-sm font-semibold">{{review.content}}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% include "includes/footer.html" %}
+{% endblock %}

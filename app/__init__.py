@@ -19,6 +19,8 @@ def create_app(config_name):
     from urllib.parse import urlencode, unquote
     from flask import request
     from .utils import paginate, order_column
+    from .models import ChatViews, Chat
+    from flask_login import current_user
     import logging
 
     app = Flask(__name__)
@@ -106,12 +108,20 @@ def create_app(config_name):
 
     app.template_filter('money')(money)
     app.template_filter('naira')(naira)
+    
+    def is_new_chat(chat):
+        view = ChatViews.query.filter_by(user_id=current_user.id).order_by(ChatViews.date_created.desc()).first()
+        return view and view.date_created <= chat.date_modified
+
+    def new_chat():
+        chats=Chat.query.filter((Chat.user_1_id == current_user.id) | (Chat.user_2_id == current_user.id))
+        return any(is_new_chat(chat) for chat in chats)
 
     @app.context_processor
     def money():
         def filter_actions(arr):
             return list(filter(lambda i: i[-1], arr))
-        return {'filter_actions': filter_actions, 'len': len, 'list': list, 'int': int, 'vars': vars}
+        return {'filter_actions': filter_actions, 'len': len, 'list': list, 'int': int, 'vars': vars, 'new_chat': new_chat}
 
     from . import models
     from . import forms
