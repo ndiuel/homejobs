@@ -4,9 +4,9 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from flask_login import current_user, login_required
 from ..decorators import roles_required
 from . import csrf
-from ..forms.user import AboutForm, ChangeImageForm, PersonalInfoForm, AddressForm, VerificationForm, ChangePersonalInfoForm
+from ..forms.user import AboutForm, ChangeImageForm, PersonalInfoForm, AddressForm, VerificationForm, ChangePersonalInfoForm, ReviewForm
 from ..utils import upload_file
-from ..models import Provider, User, Service
+from ..models import Provider, User, Service, ProviderService, Review, Rating
 
 user = Blueprint('user', __name__)
 
@@ -20,13 +20,28 @@ def timezone():
 
 
 def search_providers():
-    sq = request.args.get('sq')
-    query = Provider.query
-    return query
+    form_used = True
+    print(request.args)
+    sq = request.args.getlist('services')
+    location = request.args.get('location')
+    services = sq
+    if not location and not services:
+        form_used = False
+    s_query = Service.query.filter(Service.name.in_(services))
+    providers = ProviderService.query.filter(ProviderService.service_id.in_([s.id for s in s_query]))
+    query = Provider.query.filter(Provider.id.in_([p.id for p in providers]))
+    query = query.filter_by(state=location)
+    if query.count() > 0:
+        return query, True, form_used
+    return Provider.query, False, form_used
 
 
 @user.route("/")
 def index():
+    sq = request.args.getlist('services')
+    selected_location = request.args.get('location')
+    selected_services = sq
+   
     if current_user.is_authenticated and current_user.has_role("provider"):
         if current_user.firstname is None:
             return redirect(url_for('.upload_personal_info'))
@@ -37,7 +52,8 @@ def index():
             return redirect(url_for("user.upload_address_info"))
         if provider and provider.about is None:
             return redirect(url_for("user.upload_about_info"))
-    return render_template("index.html", providers=search_providers())
+    providers, searched, form_used = search_providers()
+    return render_template("index.html", form_used=form_used, providers=providers, searched=searched, services=Service.query.all(), locations=['Lagos', 'Akwa Ibom'], selected_location=selected_location, selected_services=selected_services)
 
 
 @user.route("/profile")
@@ -193,10 +209,60 @@ def upload_identity_info():
             provider.identification_doc_url = url 
         else:
             flash("Error occured image could not be uploaded")
-            return request(redirect.referrer)
+            return request(redirect.referresr)
         provider.save()
         flash("Verification Information Saved, Verification Will Be Processed Shortly")
         return redirect(url_for("user.index"))
     return render_template("form.html", form=form, form_title="Verification Information")
         
+        
+@user.route("/provider/<int:id>")
+def provider(id):
+    provider = Provider.query.get_or_404(id)
+    provider.profile_views = provider.profile_views or 0
+    provider.profile_views += 1
+    provider.save()
+    return render_template("provider.html", provider=provider)
+
+
+@user.route("/review/provider/<int:id>", methods=["POST", "GET"])
+@roles_required("normal")
+def review(id):
+    provider = Provider.query.get_or_404(id)
+    form = ReviewForm()
+    if form.validate_on_submit():
+        review = Review()
+        review.content = form.content.data
+        review.user = current_user
+        review.provider = provider
+        review.save()
+        flash("Your review has been saved")
+        return redirect(url_for('.provider', id=provider.id))
+    return render_template("form.html", form=form, form_title="Review Service Provider")
+
+
+@user.route("/rating/provider/<int:id>", methods=["POST", "GET"])
+@roles_required("normal")
+def rate(id):
+    provider = Provider.query.get_or_404(id)
+    if request.method == 'GET':
+        return render_template('rating.html')
+    rating = request.form.get('rating')
+    try:
+        rating = int(rating)
+    except:
+        rating = 1 
+    rate = Rating()
+    rate.provider = provider
+    rate.user = current_user
+    rate.rating = rating
+    rate.save()
+    ratings = provider.ratings
+    provider.rating = (sum(r.rating for r in ratings)/len(ratings))
+    provider.save()
+    flash("Your rating has been saved")
+    return redirect(url_for('.provider', id=provider.id))
+    
+    
+    
         

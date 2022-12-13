@@ -10,6 +10,8 @@ from .user import User
 from .role import Role, UserRoles
 from .provider import Provider
 from .service import Service, ProviderService
+from .rating import Rating
+from .review import Review
 
 
 def init_app(app):

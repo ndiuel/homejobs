@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block body %}
+{% include "includes/header.html" %}
+<div class="pb-8 px-6 min-h-full overflow-y-auto">
+    <div class="placeholder-sky-300 flex flex-col items-center py-3">
+        <img src="{{provider.user.image_url}}" alt="profile image" class="w-32 h-32 mx-auto rounded-full object-cover">
+    </div>
+    <h1 class="px-4  text-blue-700 text-center text-lg font-semibold">{{provider.user.firstname}}
+        {{provider.user.lastname}}</h1>
+    <div class="flex max-w-md mx-auto mt-2 text-gray-600 justify-between items-end space-x-2">
+        <p class="text-lg font-semibold break-words">{{provider.services_to_str}}</p>
+        <div class="space-x-2 flex text-white">
+            <a href="mailto:{{provider.user.email}}"
+                class="bg-primary w-12 h-12 rounded-full flex justify-center items-center"><i
+                    class="fa fa-envelope"></i></a>
+            <a href="tel:{{provider.user.phone_no}}"
+                class="bg-primary w-12 h-12 rounded-full flex justify-center items-center"><i
+                    class="fa fa-phone text-xs"></i></a>
+        </div>
+    </div>
+    <div
+        class="flex text-gray-700 space-x-1 font-semibold mt-4 text-center ml-auto items-center justify-center text-sm">
+        <i class="fa fa-location text-primary"></i>
+        <p class="">{{provider.lga}}, {{provider.state}}</p>
+    </div>
+    <div class="text-gray-300 w-auto text-center mt-4">
+        {% set rating = provider.rating or 1 %}
+        <i class="fa fa-star {% if rating >= 1 %}text-primary {% endif %}"></i>
+        <i class="fa fa-star {% if rating >= 2 %}text-primary {% endif %}"></i>
+        <i class="fa fa-star {% if rating >= 3 %}text-primary {% endif %}"></i>
+        <i class="fa fa-star {% if rating >= 4 %}text-primary {% endif %}"></i>
+        <i class="fa fa-star {% if rating >= 5 %}text-primary {% endif %}"></i>
+    </div>
+    <div class="flex space-x-3 mt-4 justify-center max-w-sm mx-auto">
+        <a href=""
+            class="font-semibold w-full rounded-md flex items-center justify-center text-center bg-primary text-white text-xs px-5 py-3"><i
+                class="fa fa-message mr-2"></i> Chat</a>
+        <a href="{{url_for('.review', id=provider.id)}}"
+            class="font-semibold w-full rounded-md flex items-center justify-center text-center bg-primary text-white text-xs px-5 py-3"><i
+                class="fa fa-magnifying-glass mr-2"></i> Review</a>
+        <a href="{{url_for('.rate', id=provider.id)}}"
+            class="font-semibold w-full rounded-md flex items-center justify-center text-center bg-primary text-white text-xs px-5 py-3"><i
+                class="fa fa-star mr-2"></i> Rate</a>
+    </div>
+    <div class="mt-5 max-w-md mx-auto">
+        <h1 class="text-primary text-lg font-semibold">About</h1>
+        <p class="text-gray-800 text-sm font-semibold mt-2">{{provider.about}}</p>
+    </div>
+    <div class="mt-5 max-w-md mx-auto">
+        <h1 class="text-primary text-lg font-semibold">Reviews</h1>
+        <div class="">
+            {% for review in provider.reviews %}
+
+            <div class="py-5 border-b border-gray-300 flex w-full items-center">
+                {% if review.user.image_url %}
+                <img src="{{review.user.image_url}}" alt="" class="rounded-full w-16 h-16">
+                {% else %}
+                <i class="fa fa-user text-primary text-lg"></i>
+                {% endif %}
+                <div class="ml-4 flex flex-col justify-center text-gray-700 space-y-1">
+                    <p class="font-semibold">{{review.user.firstname}} {{review.user.lastname}}</p>
+                    <p class="text-sm font-semibold">{{review.content}}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% include "includes/footer.html" %}
+{% endblock %}

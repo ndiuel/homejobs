@@ -45,4 +45,8 @@ def AboutForm():
         submit = SubmitField("Submit")
     return _About
         
+
+class ReviewForm(Form):
+    content = TextAreaField("Please Enter Your Review", validators=[DataRequired()])
+    submit = SubmitField("Submit Review")
     

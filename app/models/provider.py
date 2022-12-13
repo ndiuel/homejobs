@@ -23,6 +23,8 @@ class Provider(db.Model, BaseModel):
             'users', lazy='dynamic'
         )
     )
+    profile_views = db.Column(db.Integer) 
+    rating = db.Column(db.Integer, default=1)
     
     @property
     def services_to_str(self):
