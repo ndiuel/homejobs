@@ -114,8 +114,9 @@ def create_app(config_name):
         return view and view.date_created <= chat.date_modified
 
     def new_chat():
-        chats=Chat.query.filter((Chat.user_1_id == current_user.id) | (Chat.user_2_id == current_user.id))
-        return any(is_new_chat(chat) for chat in chats)
+        if current_user.is_authenticated:
+            chats=Chat.query.filter((Chat.user_1_id == current_user.id) | (Chat.user_2_id == current_user.id)) 
+            return any(is_new_chat(chat) for chat in chats)
 
     @app.context_processor
     def money():

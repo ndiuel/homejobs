@@ -41,6 +41,7 @@ def index():
     sq = request.args.getlist('services')
     selected_location = request.args.get('location')
     selected_services = sq
+    provider = None
    
     if current_user.is_authenticated:
         if current_user.first_name is None:
@@ -54,7 +55,7 @@ def index():
         if provider and provider.about is None:
             return redirect(url_for("user.upload_about_info"))
     providers, searched, form_used = search_providers()
-    return render_template("index.html", form_used=form_used, providers=providers, searched=searched, services=Service.query.all(), locations=['Lagos', 'Akwa Ibom'], selected_location=selected_location, selected_services=selected_services, provider = Provider.query.filter_by(user_id=current_user.id).first())
+    return render_template("index.html", form_used=form_used, providers=providers, searched=searched, services=Service.query.all(), locations=['Lagos', 'Akwa Ibom'], selected_location=selected_location, selected_services=selected_services, provider=provider)
 
 
 @user.route("/profile")

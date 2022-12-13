@@ -8,7 +8,7 @@
             <span>Home</span>
         </a>
 
-        <a href="" class="flex py-4 px-4 space-x-3 items-center hover:text-primary">
+        <a href="/messages" class="flex py-4 px-4 space-x-3 items-center hover:text-primary">
             <i class="fa fa-envelope text-sm"></i>
             <span>Messages</span>
 
@@ -20,8 +20,8 @@
     </aside>
     <div class="h-full flex-col flex w-full max-h-full">
         {% include "includes/header.html" %}
-        {% if current_user.has_role('provider') %}
-        <div class="h-full overflow-y-auto px-6 py-6 sm:flex max-w-xl mx-auto w-full sm:space-x-4">
+        {% if current_user.is_authenticated and current_user.has_role('provider') %}
+        <div class="h-full overflow-y-auto px-6 py-6 sm:flex mx-auto w-full sm:space-x-4 sm:h-36">
             <div class="mt-4 w-full max-w-sm rounded-lg px-4 py-6 flex bg-sky-50 shadow-md">
                 <div class="w-10 min-h-full flex items-center justify-center">
                     <i class="fa fa-traffic-light text-primary"></i>
